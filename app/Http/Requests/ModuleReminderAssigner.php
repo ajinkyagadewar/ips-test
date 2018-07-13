@@ -18,31 +18,30 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace App\Interfaces;
+namespace App\Http\Requests;
 
-use App\Models\User;
+use Illuminate\Foundation\Http\FormRequest;
 
-interface CourseTagsRepositoryInterface
+class ModuleReminderAssigner extends FormRequest
 {
     /**
-     * Create / Update all Start Module Reminder tags into the database
+     * Determine if the user is authorized to make this request.
      *
-     * @return mixed
+     * @return bool
      */
-    public function createOrUpdateTags();
-    
+    public function authorize()
+    {
+        return true;
+    }
     /**
-     * Get the id of the tag to be set for a contact
+     * Get the validation rules that apply to the request.
      *
-     * @param User $user
-     * @param $contact
-     * @return Tag
+     * @return array
      */
-    public function getModuleReminderTag(User $user, $contact);
-    
-    /**
-     * @param $email
-     * @return mixed
-     */
-    public function setUserModuleReminderTag($email);
+    public function rules()
+    {
+        return [
+            'contact_email' => 'required'
+        ];
+    }
 }

@@ -18,31 +18,43 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+
 namespace App\Interfaces;
 
 use App\Models\User;
 
-interface CourseTagsRepositoryInterface
+interface ModuleRepositoryInterface
 {
     /**
-     * Create / Update all Start Module Reminder tags into the database
+     * Get an array of all the modules in a course
      *
-     * @return mixed
+     * @param string $courseKey
+     * @return array
      */
-    public function createOrUpdateTags();
+    public function getAllModulesInCourse($courseKey);
     
     /**
-     * Get the id of the tag to be set for a contact
+     * Get a multi dimensional array containing all modules across the 
+     * courses
+     *
+     * @param array $courseKeys
+     * @return array
+     */
+    public function getAllModulesInCourses(array $courseKeys);
+    
+    /**
+     * Get all modules that the user has completed
      *
      * @param User $user
-     * @param $contact
-     * @return Tag
+     * @return array
      */
-    public function getModuleReminderTag(User $user, $contact);
+    public function getCompletedModules(User $user);
     
     /**
-     * @param $email
-     * @return mixed
+     * @param array $completedModules
+     * @param array $allCoursesModules
+     * @return string
      */
-    public function setUserModuleReminderTag($email);
+    public function getNextModuleToRemind(array $completedModules, 
+            array $allCoursesModules = []);
 }

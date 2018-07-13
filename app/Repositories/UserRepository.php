@@ -22,9 +22,19 @@ namespace App\Repositories;
 use App\Models\User;
 use App\Events\UserCreated;
 use App\Interfaces\UserRepositoryInterface;
+use App\Http\Helpers\InfusionsoftHelper;
 
 class UserRepository implements UserRepositoryInterface 
 {
+    /**
+     * @var InfusionsoftHelper
+     */
+    public $infusionSoftHelper;
+    public function __construct(InfusionsoftHelper $infusionSoftHelper)
+    {
+        $this->infusionSoftHelper = $infusionSoftHelper;
+    }
+
     /**
      * Create and save a new user
      * @inheritdoc
@@ -42,5 +52,28 @@ class UserRepository implements UserRepositoryInterface
          */
         event(new UserCreated($user, $products));
         return $user;
+    }
+    
+    /**
+     * Find an InfusionSoft Contact using Email
+     *
+     * @param $email
+     * @return mixed
+     */
+    public function findContactByEmail($email)
+    {
+        $contact = $this->infusionSoftHelper->getContact($email);
+        return $contact;
+    }
+    
+    /**
+     * Find User using Email
+     *
+     * @param string $email
+     * @return mixed
+     */
+    public function findUserByEmail($email)
+    {
+        return User::where('email', $email)->first();
     }
 }

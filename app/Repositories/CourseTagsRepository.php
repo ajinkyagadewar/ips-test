@@ -19,9 +19,14 @@
  */
 
 namespace App\Repositories;
-use App\Interfaces\CourseTagsRepositoryInterface;
+
 use App\Http\Helpers\InfusionsoftHelper;
+use App\Interfaces\CourseTagsRepositoryInterface;
+use App\Interfaces\UserRepositoryInterface;
+use App\Interfaces\ModuleRepositoryInterface;
 use App\Models\CourseTag;
+use App\Models\Tag;
+use App\Models\User;
 
 class CourseTagsRepository implements CourseTagsRepositoryInterface {
     
@@ -29,13 +34,28 @@ class CourseTagsRepository implements CourseTagsRepositoryInterface {
      * @var App\Http\Helpers\InfusionsoftHelper
      */
     public $infusionSoftHelper;
-    public function __construct(InfusionsoftHelper $infusionSoftHelper)
+    
+    /**
+     * @var UserRepositoryInterface
+     */
+    public $userRepository;
+    
+    /**
+     * @var ModuleRepositoryInterface
+     */
+    public $moduleRepository;
+    
+    public function __construct(InfusionsoftHelper $infusionSoftHelper, 
+            UserRepositoryInterface $userRepository,
+            ModuleRepositoryInterface $moduleRepository)
     {
         $this->infusionSoftHelper = $infusionSoftHelper;
+        $this->userRepository = $userRepository;
+        $this->moduleRepository = $moduleRepository;
     }
     
     /**
-     * Create / Update all Start Module Reminder tags into the database
+     * Create / Update all module tags into the database
      * @inheritdoc
      * @return mixed
      */
@@ -51,4 +71,41 @@ class CourseTagsRepository implements CourseTagsRepositoryInterface {
         }
         return $courseTags;
     }
+    
+    /**
+     * Get the id of the tag to be set for a contact
+     *
+     * @param User $user
+     * @param $contact
+     * @return Tag
+     */
+    public function getModuleReminderTag(User $user, $contact)
+    {
+        // Convert the comma delimited string to an array
+        $courses = explode(',', $contact['_Products']);
+        $allPurchasedModules = $this->moduleRepository->getAllModulesInCourses($courses);
+        $allCompletedModules = $this->moduleRepository->getCompletedModules($user);
+        $nextModuleToRemind = $this->moduleRepository->getNextModuleToRemind($allCompletedModules, $allPurchasedModules);
+        
+        $courseTag = CourseTag::where('name', 'like', "%{$nextModuleToRemind}%")->first();
+        return $courseTag;
+    }
+    
+    /**
+     * Set the Start Module reminder tag for a user.
+     *
+     * @param $email
+     * @return mixed
+     */
+    public function setUserModuleReminderTag($email)
+    {
+        $contact = $this->userRepository->findContactByEmail($email);
+        $user = $this->userRepository->findUserByEmail($email);
+        
+        $courseTag = $this->getModuleReminderTag($user, $contact);
+        
+        $this->infusionSoftHelper->addTag($contact['Id'], $courseTag->id);
+        return $courseTag;
+    }
+
 }

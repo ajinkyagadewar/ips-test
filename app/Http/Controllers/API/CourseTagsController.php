@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Interfaces\CourseTagsRepositoryInterface;
 
@@ -28,15 +29,32 @@ class CourseTagsController extends Controller
             $courseTags = $this->courseTagsRepository->createOrUpdateTags();
             return response()->json([
                 'success' => true,
-                'message' => 'Tags have been created successfully.',
+                'message' => 'Tags created successfully.',
                 'data' => $courseTags
             ],200);
         } catch (\Exception $e) {
             Log::error((string) $e);
             return response()->json([
                'success' => false,
-               'message' => 'Tags creation has halted due to an error.'
+               'message' => 'Tags creation has halted due to an error. Please check the logs.'
             ],500);
+        }
+    }
+    
+    public function assignModuleReminder(Request $request)
+    {
+        try{
+            $courseTag = $this->courseTagsRepository->setUserModuleReminderTag($request->contact_email);
+            return response()->json([
+                'success' => true,
+                'message' => $courseTag->name
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error((string) $e);
+            return response()->json([
+                'success' => false,
+                'message' => 'Module reminder was not set. Please check the logs.'
+            ], 500);
         }
     }
 }

@@ -29,6 +29,34 @@ class User extends Authenticatable
 
     public function completed_modules()
     {
-        return $this->belongsToMany('App\Models\Module', 'user_completed_modules');
+        return $this->belongsToMany(Module::class, 'user_completed_modules');
+    }
+    
+    /**
+     * Get an array of module Names using course keys and numbers
+     *
+     * @param array $modules
+     * @return array
+     */
+    public function getModuleNames(array $modules)
+    {
+        $moduleNames = [];
+        
+        foreach ($modules as $courseKey => $moduleNumbers) {
+            
+            foreach ($moduleNumbers as $moduleNumber) {
+                array_push($moduleNames, strtoupper($courseKey)." Module {$moduleNumber}");
+            }
+        }
+        return $moduleNames;
+    }
+    
+    /**
+     * @param array $modules
+     */
+    public function markModulesAsCompleted(array $modules)
+    {
+        $moduleNames = $this->getModuleNames($modules);
+        $this->completed_modules()->attach(Module::whereIn('name', $moduleNames)->get());
     }
 }

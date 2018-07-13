@@ -37,7 +37,7 @@ class CourseTagsTest extends TestCase
             ->assertJson([
                 'success' => true,
                 'data' => $this->courseTags->toArray(),
-                'message' => 'Tags have been created successfully.'
+                'message' => 'Tags created successfully.'
             ]);
         
         

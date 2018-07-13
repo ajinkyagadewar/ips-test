@@ -18,7 +18,10 @@ class AppServiceProvider extends ServiceProvider
       Interfaces\CourseTagsRepositoryInterface::class 
             => Repositories\CourseTagsRepository::class,
       Interfaces\UserRepositoryInterface::class 
-            => Repositories\UserRepository::class
+            => Repositories\UserRepository::class,
+      Interfaces\ModuleRepositoryInterface::class 
+            => Repositories\ModuleRepository::class
+
     ];
     
     /**

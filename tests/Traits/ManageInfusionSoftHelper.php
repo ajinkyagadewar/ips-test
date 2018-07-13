@@ -18,31 +18,25 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace App\Interfaces;
 
-use App\Models\User;
+namespace Tests\Traits;
 
-interface CourseTagsRepositoryInterface
+use App\Http\Helpers\InfusionsoftHelper;
+
+trait ManageInfusionSoftHelper
 {
     /**
-     * Create / Update all Start Module Reminder tags into the database
-     *
-     * @return mixed
+     * @var
      */
-    public function createOrUpdateTags();
-    
-    /**
-     * Get the id of the tag to be set for a contact
-     *
-     * @param User $user
-     * @param $contact
-     * @return Tag
-     */
-    public function getModuleReminderTag(User $user, $contact);
-    
-    /**
-     * @param $email
-     * @return mixed
-     */
-    public function setUserModuleReminderTag($email);
+    public $infusionSoftHelper;
+    public function mockInfusionSoftHelper()
+    {
+        $infusionSoftHelper = $this->mock(InfusionsoftHelper::class);
+        $infusionSoftHelper->shouldReceive('getContact')
+            ->with($this->user->email)
+            ->andReturn($this->mockContact);
+        
+        $infusionSoftHelper->shouldReceive('addTag')
+            ->once();
+    }
 }

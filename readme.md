@@ -18,3 +18,14 @@ Customer can also have only one course. In that case order is IPA M1, … , IPA 
 - Databases - MySQL for Development and SQLite for Testing
 - Mocking is used for Testing External APIs
 - Interfaces created for => Tags, Users and Reminders
+- Events used to create Contacts in Infusion Soft as soon as user is created in portal
+- Traits used in test to remove redundant code
+
+## Best Points
+
+- Code will work for any number of courses and modules
+- Highly flexible 
+- Very low coupled
+- Interfaces used to interact with low level business logic
+- PHPMetrics shows it to be a high quality code. Added CodeCoverage report
+

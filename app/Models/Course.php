@@ -18,31 +18,24 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace App\Interfaces;
-
-use App\Models\User;
-
-interface CourseTagsRepositoryInterface
+namespace App\Models;
+class Course
 {
     /**
-     * Create / Update all Start Module Reminder tags into the database
-     *
-     * @return mixed
+     * @var int
      */
-    public function createOrUpdateTags();
+    private static $modulesPerCourse = 7;
     
     /**
-     * Get the id of the tag to be set for a contact
-     *
-     * @param User $user
-     * @param $contact
-     * @return Tag
+     * @param string $courseKey
+     * @return array
      */
-    public function getModuleReminderTag(User $user, $contact);
-    
-    /**
-     * @param $email
-     * @return mixed
-     */
-    public function setUserModuleReminderTag($email);
+    public function getAllModules($courseKey = '')
+    {
+        $modules = [];
+        for ($i = 1; $i <= self::$modulesPerCourse; $i++) {
+            array_push($modules, $i);
+        }
+        return $modules;
+    }
 }

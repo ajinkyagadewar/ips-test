@@ -20,6 +20,7 @@
 
 namespace Tests\Traits;
 use App\Interfaces\UserRepositoryInterface;
+use Illuminate\Support\Facades\Event;
 
 /**
  * A Trait is intended to reduce some limitations of single inheritance by 
@@ -36,6 +37,7 @@ trait ManageUsers
     public function createTestUser($userData, Array $products)
     {
         $userRepository = app()->make(UserRepositoryInterface::class);
+        Event::fake();
         $user = $userRepository->saveUser($userData, $products);
         return $user;
     }

@@ -14,4 +14,5 @@ use Illuminate\Http\Request;
 */
 
 # API to save all tags
-Route::get('/saveAllTags', 'Api\CourseTagsController@saveAllTags');
+Route::get('saveAllTags', 'Api\CourseTagsController@saveAllTags');
+Route::post('module_reminder_assigner', 'Api\CourseTagsController@assignModuleReminder');

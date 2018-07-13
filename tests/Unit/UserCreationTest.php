@@ -22,9 +22,10 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Tests\Traits\ManageUsers;
-use App\Http\Helpers\InfusionsoftHelper;
 use App\Models\Products;
 use App\Models\User;
+use App\Events\UserCreated;
+use Illuminate\Support\Facades\Event;
 
 class UserCreationTest extends TestCase
 {
@@ -43,15 +44,10 @@ class UserCreationTest extends TestCase
         ];
         
         $userData = factory(User::class)->make();
-        $infusionSoftHelper = $this->mock(InfusionsoftHelper::class);
-        $infusionSoftHelper->shouldReceive('createContact')
-            ->with([
-                'Email' => $userData->email,
-                '_Products' => "iaa,iea"
-            ])
-            ->once();
         
         $user = $this->createTestUser($userData, $products);
+        
+        Event::assertDispatched(UserCreated::class, 1);
         
         $this->assertDatabaseHas('users', [
            'email' => $user->email

@@ -20,8 +20,6 @@
 
 namespace App\Interfaces;
 
-use App\Models\User;
-
 interface UserRepositoryInterface
 {
     /**
@@ -31,4 +29,12 @@ interface UserRepositoryInterface
      * @return $user
      */
     public static function saveUser($userDetails, Array $products);
+    
+    /**
+     * Find an InfusionSoft Contact using Email
+     *
+     * @param $email
+     * @return mixed
+     */
+    public function findContactByEmail($email);
 }
