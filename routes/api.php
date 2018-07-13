@@ -13,3 +13,5 @@ use Illuminate\Http\Request;
 |
 */
 
+# API to save all tags
+Route::get('/saveAllTags', 'Api\CourseTagsController@saveAllTags');

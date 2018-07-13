@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Module;
+use App\Models\Module;
 
 class iPSDevTestSeeder extends Seeder
 {

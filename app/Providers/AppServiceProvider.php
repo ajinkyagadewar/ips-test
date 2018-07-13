@@ -3,9 +3,22 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
+use App\Repositories;
+use App\Interfaces;
 
 class AppServiceProvider extends ServiceProvider
 {
+    /**
+     * Interface mapping to Repositories
+     *
+     * @var array
+     */
+    private static $repositoryInterfaces = [
+      Interfaces\CourseTagsRepositoryInterface::class 
+            => Repositories\CourseTagsRepository::class
+    ];
+    
     /**
      * Bootstrap any application services.
      *
@@ -13,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Schema::defaultStringLength(191);
     }
 
     /**
@@ -23,6 +36,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->registerRepositoryInterfaces();
+    }
+    
+    /**
+     * Bind the implementations of various interfaces to the interface 
+     * definitions.
+     */
+    private function registerRepositoryInterfaces()
+    {
+        foreach (self::$repositoryInterfaces as $interface => $implementation){
+            $this->app->bind($interface, $implementation);
+        }
     }
 }
