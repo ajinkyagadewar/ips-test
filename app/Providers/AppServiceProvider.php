@@ -16,7 +16,9 @@ class AppServiceProvider extends ServiceProvider
      */
     private static $repositoryInterfaces = [
       Interfaces\CourseTagsRepositoryInterface::class 
-            => Repositories\CourseTagsRepository::class
+            => Repositories\CourseTagsRepository::class,
+      Interfaces\UserRepositoryInterface::class 
+            => Repositories\UserRepository::class
     ];
     
     /**
